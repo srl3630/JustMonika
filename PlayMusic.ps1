@@ -51,7 +51,8 @@ public class Audio
 [audio]::Volume = 1.0 # 0.2 = 20%, etc.
 [audio]::Mute = $false
 $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
-$path = $scriptPath+"\justmonika.wav"
+$music=$args[0]
+$path = $scriptPath+"\"+"$music
 Write-Host $path
  $soundplayer = New-Object Media.SoundPlayer $Path
  $soundplayer.PlaySync()
