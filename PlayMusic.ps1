@@ -54,10 +54,11 @@ $music=$args[0]
 $path = $scriptPath+"\"+"$music"
 Write-Host $path
  $soundplayer = New-Object Media.SoundPlayer $Path
- $job = Start-Job {$soundplayer.PlaySync()} -Name music
- While (Get-Job music -ChildJobState Running){
+ $job = Start-Job { $soundplayer.PlaySync() } -Name music
+ While ($job.State -eq "Running"){
+    $temp = $job.state
+    Write-Host = $temp
     Start-Sleep 2
     [audio]::Volume = 1.0 # 0.2 = 20%, etc.
     [audio]::Mute = $false
  }
-
