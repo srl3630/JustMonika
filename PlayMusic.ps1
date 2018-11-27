@@ -1,4 +1,4 @@
-﻿Add-Type -TypeDefinition @'
+Add-Type -TypeDefinition @'
 using System.Runtime.InteropServices;
 [Guid("5CDF2C82-841E-4546-9722-0CF74078229A"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
 interface IAudioEndpointVolume
@@ -48,11 +48,16 @@ public class Audio
     }
 }
 '@
-[audio]::Volume = 1.0 # 0.2 = 20%, etc.
-[audio]::Mute = $false
+
 $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
 $music=$args[0]
-$path = $scriptPath+"\"+"$music
+$path = $scriptPath+"\"+"$music"
 Write-Host $path
  $soundplayer = New-Object Media.SoundPlayer $Path
- $soundplayer.PlaySync()
+ $job = Start-Job {$soundplayer.PlaySync()} -Name music
+ While (Get-Job music -ChildJobState Running){
+    Start-Sleep 2
+    [audio]::Volume = 1.0 # 0.2 = 20%, etc.
+    [audio]::Mute = $false
+ }
+
