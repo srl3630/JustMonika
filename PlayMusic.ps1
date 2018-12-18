@@ -53,12 +53,12 @@ $scriptPath = split-path -parent $MyInvocation.MyCommand.Definition
 $music=$args[0]
 $path = $scriptPath+"\"+"$music"
 Write-Host $path
- $soundplayer = New-Object Media.SoundPlayer $Path
- $job = Start-Job { $soundplayer.PlaySync() } -Name music
- While ($job.State -eq "Running"){
-    $temp = $job.state
-    Write-Host = $temp
-    Start-Sleep 2
+$soundplayer = New-Object Media.SoundPlayer $Path
+$soundplayer.PlayLooping()
+$times = 0
+While ($times -lt 600){
+    Start-Sleep 1
     [audio]::Volume = 1.0 # 0.2 = 20%, etc.
     [audio]::Mute = $false
+    $times += 1
  }
